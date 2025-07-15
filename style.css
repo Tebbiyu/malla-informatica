@@ -1,35 +1,31 @@
-/* ... (estilos existentes) ... */
+body {
+  font-family: sans-serif;
+  margin: 2rem;
+  background-color: #f9f9f9;
+  color: #333;
+}
 
-/* Clases para las líneas formativas (ejemplo, ajusta los colores) */
-.Desarrollo_de_Soluciones_de_Software rect {
-    fill: #ADD8E6; /* Azul claro */
-    stroke: #3498db;
+h1 {
+  text-align: center;
+  color: #202060;
 }
-.Base_de_Datos rect {
-    fill: #90EE90; /* Verde claro */
-    stroke: #2ecc71;
+
+#checkbox-panel {
+  margin-bottom: 2rem;
+  background: #fff;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
-.Requisitos rect {
-    fill: #FFDAB9; /* Naranja claro */
-    stroke: #e67e22;
+
+.checkbox-item {
+  display: inline-block;
+  margin: 4px 0;
 }
-.Matematica rect {
-    fill: #DDA0DD; /* Morado claro */
-    stroke: #9b59b6;
-}
-.Habilidades_de_Comunicacion rect {
-    fill: #FFB6C1; /* Rojo claro */
-    stroke: #e74c3c;
-}
-.Formacion_Sello rect {
-    fill: #FFFF00; /* Amarillo */
-    stroke: #f1c40f;
-}
-.Especializacion_IA rect {
-    fill: #C0C0C0; /* Gris */
-    stroke: #7f8c8d;
-}
-.Formacion_Optativa rect {
-    fill: #E6E6FA; /* Lavanda */
-    stroke: #8e44ad;
+
+pre.mermaid {
+  background: white;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
