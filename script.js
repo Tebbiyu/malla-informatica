@@ -1,4 +1,4 @@
-// Tus datos de la malla (copia y pega el JSON que generamos antes aquí, sin cambios)
+// Datos de la malla curricular, directamente en el script
 const mallaData = [
   {
     "semestre": 1,
@@ -79,31 +79,21 @@ const mallaData = [
   }
 ];
 
+// Función para generar la sintaxis de Mermaid
 function generateMermaidGraph(data) {
-    let graphDefinition = "graph TD\n";
-
-    const lineStyles = {
-        "Desarrollo de Soluciones de Software": "fill:#ADD8E6,stroke:#3498db,stroke-width:2px",
-        "Base de Datos": "fill:#90EE90,stroke:#2ecc71,stroke-width:2px",
-        "Requisitos": "fill:#FFDAB9,stroke:#e67e22,stroke-width:2px",
-        "Matemática": "fill:#DDA0DD,stroke:#9b59b6,stroke-width:2px",
-        "Habilidades de Comunicación": "fill:#FFB6C1,stroke:#e74c3c,stroke-width:2px",
-        "Formación Sello": "fill:#FFFF00,stroke:#f1c40f,stroke-width:2px",
-        "Especialización IA": "fill:#C0C0C0,stroke:#7f8c8d,stroke-width:2px",
-        "Formación Optativa": "fill:#E6E6FA,stroke:#8e44ad,stroke-width:2px"
-    };
+    let graphDefinition = "graph TD\n"; // Dirección Top-Down
 
     data.forEach(semestreData => {
-        // Corrección en la definición del subgraph: el ID del subgraph debe ser simple.
-        // Y el texto descriptivo del subgraph debe ir entre corchetes o comillas.
+        // Definición de subgrafos: subgraph ID [Texto del Subgraph]
+        // El ID (S${semestreData.semestre}) debe ser una sola palabra sin espacios.
         graphDefinition += `    subgraph S${semestreData.semestre} [Semestre ${semestreData.semestre}]\n`;
         semestreData.cursos.forEach(curso => {
-            // Se recomienda usar paréntesis para el texto del nodo si contiene HTML como <br/>.
-            // El ID del nodo (${curso.id}) debe ser simple (sin espacios ni caracteres especiales).
+            // Nodos: ID("Texto<br/>del<br/>Nodo") para multilinea con HTML
             graphDefinition += `        ${curso.id}("${curso.id}<br/>${curso.nombre}")\n`;
 
-            if (lineStyles[curso.linea]) {
-                // Generar un nombre de clase válido para CSS
+            // Asignar clases CSS basadas en la línea formativa
+            if (curso.linea) {
+                // Limpia el nombre de la línea para usarlo como clase CSS válida
                 const className = curso.linea.replace(/ /g, '_').replace(/[^a-zA-Z0-9_]/g, '');
                 graphDefinition += `        class ${curso.id} ${className}\n`;
             }
@@ -111,16 +101,15 @@ function generateMermaidGraph(data) {
         graphDefinition += `    end\n`;
     });
 
+    // Añadir las dependencias (prerrequisitos)
     data.forEach(semestreData => {
         semestreData.cursos.forEach(curso => {
             curso.prerrequisitos.forEach(prereq => {
                 if (prereq.includes("Semestre Aprobado")) {
-                    // Podemos manejar este caso creando un nodo "Semestres Anteriores" si queremos
-                    // o simplemente omitiéndolo, ya que no es una dependencia directa de curso a curso.
-                    // Por ahora, lo omitimos para evitar un grafo muy denso.
+                    // Estos requisitos generales no se dibujan como flechas directas entre cursos,
+                    // sino que son más bien condiciones para el avance general de la malla.
+                    // Si quisieras representarlos, podrías crear un nodo abstracto como "Semestres Anteriores Completados".
                 } else {
-                    // Asegurarse de que el ID del prerrequisito exista como un nodo definido.
-                    // Si un prerrequisito no está en nuestra mallaData, esto podría causar problemas.
                     graphDefinition += `    ${prereq} --> ${curso.id}\n`;
                 }
             });
@@ -130,33 +119,39 @@ function generateMermaidGraph(data) {
     return graphDefinition;
 }
 
+// Lógica de inicialización y renderizado de Mermaid al cargar el DOM
 document.addEventListener('DOMContentLoaded', () => {
-    const mermaidGraph = generateMermaidGraph(mallaData);
+    const mermaidGraph = generateMermaidGraph(mallaData); // Genera el grafo
 
+    // Configura Mermaid
     mermaid.initialize({
-        startOnLoad: false,
-        theme: 'default',
+        startOnLoad: false, // Desactivamos la carga automática ya que lo renderizamos manualmente
+        theme: 'default',   // Puedes cambiar el tema ('forest', 'dark', 'neutral')
         flowchart: {
-            curve: 'linear',
-            htmlLabels: true
+            curve: 'linear',  // Tipo de curva para las flechas ('linear', 'basis', 'monotoneX', 'step')
+            htmlLabels: true  // Permite HTML dentro de las etiquetas de los nodos (para <br/>)
         },
-        securityLevel: 'loose' // Necesario para permitir HTML en labels y quizás interactividad futura
+        securityLevel: 'loose' // Permite más flexibilidad, a veces necesario para HTML en labels
     });
 
+    // Obtiene el elemento donde se renderizará el diagrama
     const diagramDiv = document.getElementById('mallaDiagram');
     if (diagramDiv) {
-        // Utiliza el método render que devuelve una Promesa
+        // Renderiza el diagrama y maneja la promesa (éxito/error)
         mermaid.render('graphDiv', mermaidGraph)
             .then(({ svg, bindFunctions }) => {
-                diagramDiv.innerHTML = svg; // Inserta el SVG generado
+                diagramDiv.innerHTML = svg; // Inserta el SVG generado por Mermaid
                 if (bindFunctions) {
-                    bindFunctions(); // Adjunta cualquier evento interactivo si Mermaid los crea
+                    bindFunctions(); // Adjunta cualquier evento interactivo que Mermaid haya creado
                 }
             })
             .catch(error => {
-                console.error('Error rendering Mermaid diagram:', error);
-                // Muestra un mensaje de error más útil en la página
-                diagramDiv.innerHTML = `<div style="color: red; font-weight: bold;">Error al cargar la malla. Por favor, revisa la consola para más detalles.<br/>Mensaje: ${error.message}</div>`;
+                console.error('Error al renderizar el diagrama de Mermaid:', error);
+                // Muestra un mensaje de error legible en la página si algo falla
+                diagramDiv.innerHTML = `<div style="color: red; font-weight: bold;">
+                                            Error al cargar la malla. Por favor, revisa la consola del navegador para más detalles.
+                                            <br/>Mensaje: ${error.message}
+                                        </div>`;
             });
     } else {
         console.error("Elemento con ID 'mallaDiagram' no encontrado en el DOM.");
