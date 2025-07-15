@@ -6,10 +6,10 @@
   <title>Malla Curricular - Informática IA</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Mermaid.js desde CDN -->
-  <script type="module">
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs";
-    mermaid.initialize({ startOnLoad: true });
+  <!-- Mermaid.js clásico para que esté disponible globalmente -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: false });
   </script>
 </head>
 <body>
@@ -17,11 +17,10 @@
 
   <section id="checkbox-panel">
     <p>Haz clic en las asignaturas que ya cursaste para tacharlas:</p>
-    <!-- Aquí se generan los checkboxes dinámicamente -->
   </section>
 
   <pre class="mermaid" id="malla">
-<!-- Aquí se renderiza la malla con Mermaid.js -->
+<!-- Aquí se renderiza el gráfico -->
   </pre>
 
   <script src="script.js"></script>
