@@ -1,82 +1,35 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f0f2f5; /* Un gris muy claro */
-    color: #333;
-    line-height: 1.6;
+/* ... (estilos existentes) ... */
+
+/* Clases para las líneas formativas (ejemplo, ajusta los colores) */
+.Desarrollo_de_Soluciones_de_Software rect {
+    fill: #ADD8E6; /* Azul claro */
+    stroke: #3498db;
 }
-
-.container {
-    max-width: 1400px; /* Ancho un poco mayor para la malla */
-    margin: 20px auto;
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+.Base_de_Datos rect {
+    fill: #90EE90; /* Verde claro */
+    stroke: #2ecc71;
 }
-
-h1 {
-    color: #2c3e50; /* Un azul oscuro */
-    text-align: center;
-    margin-bottom: 30px;
-    font-size: 2.2em;
+.Requisitos rect {
+    fill: #FFDAB9; /* Naranja claro */
+    stroke: #e67e22;
 }
-
-.mermaid {
-    width: 100%;
-    height: auto; /* Altura automática basada en el contenido */
-    min-height: 1000px; /* Asegura una altura mínima para ver la malla */
-    border: 1px solid #e0e0e0; /* Borde sutil */
-    border-radius: 8px;
-    background-color: #ffffff;
-    overflow: auto; /* Permite scroll si la malla es muy grande */
-    padding: 20px;
+.Matematica rect {
+    fill: #DDA0DD; /* Morado claro */
+    stroke: #9b59b6;
 }
-
-/* --- Estilos específicos para Mermaid (pueden sobreescribir los colores predeterminados) --- */
-
-/* Estilos de los nodos (cursos) */
-.node rect {
-    stroke-width: 2px;
-    stroke: #3498db; /* Borde principal */
-    fill: #ecf0f1; /* Fondo principal */
+.Habilidades_de_Comunicacion rect {
+    fill: #FFB6C1; /* Rojo claro */
+    stroke: #e74c3c;
 }
-
-.node text {
-    fill: #2c3e50; /* Color del texto del nodo */
-    font-size: 0.85em; /* Tamaño de fuente un poco más pequeño */
-    font-weight: bold;
+.Formacion_Sello rect {
+    fill: #FFFF00; /* Amarillo */
+    stroke: #f1c40f;
 }
-
-/* Estilos de las flechas (líneas de prerrequisitos) */
-.edgePaths .edgePath .path {
-    stroke: #2ecc71; /* Un verde vibrante para las flechas */
-    stroke-width: 2px;
-    marker-end: url(#arrowhead); /* Asegura que la flecha tenga una punta */
+.Especializacion_IA rect {
+    fill: #C0C0C0; /* Gris */
+    stroke: #7f8c8d;
 }
-
-/* Estilos de los subgrafos (semestres) */
-.cluster rect {
-    fill: #f7f9fc; /* Fondo de los semestres */
-    stroke: #bdc3c7; /* Borde de los semestres */
-    stroke-width: 1px;
-    stroke-dasharray: 5 5; /* Borde punteado para los semestres */
-}
-
-.cluster text {
-    fill: #7f8c8d; /* Color del texto del semestre */
-    font-weight: bold;
-    font-size: 1.1em;
-}
-
-/* Personalización de colores por línea formativa (basado en lineStyles en script.js) */
-/* Estos estilos se aplicarán a través de `style` en la definición del grafo de Mermaid */
-/* No necesitas definirlos aquí directamente, Mermaid los inyecta. */
-/* Lo que sí puedes hacer es definir clases para estos si quisieras más control con CSS */
-
-/* Ejemplo si quisieras dar feedback visual al pasar el mouse */
-.node:hover rect {
-    fill: #dbe4e6; /* Cambia de color al pasar el mouse */
-    cursor: pointer;
+.Formacion_Optativa rect {
+    fill: #E6E6FA; /* Lavanda */
+    stroke: #8e44ad;
 }
