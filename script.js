@@ -79,67 +79,50 @@ const semestres = [
   }
 ];
 
-const malla = document.getElementById("malla");
 const panel = document.getElementById("checkbox-panel");
 
 function generarCheckboxes() {
+  panel.innerHTML = "";
+  // Leer los checkboxes marcados si hay alguno
+  const checkedAsignaturas = new Set(
+    [...document.querySelectorAll('input[type="checkbox"]:checked')].map(cb => cb.dataset.asignatura)
+  );
+
   semestres.forEach((semestre, i) => {
     const contenedor = document.createElement("div");
     contenedor.className = "semestre-box";
 
-    const titulo = document.createElement("h2");
+    const titulo = document.createElement("div");
+    titulo.className = "semestre-title";
     titulo.textContent = semestre.nombre;
     contenedor.appendChild(titulo);
 
     semestre.asignaturas.forEach(asig => {
       const label = document.createElement("label");
       label.className = "checkbox-item";
+
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.dataset.asignatura = asig;
-      checkbox.addEventListener("change", actualizarMalla);
+      if (checkedAsignaturas.has(asig)) checkbox.checked = true;
+      checkbox.addEventListener("change", () => {
+        generarCheckboxes(); // Volver a renderizar para actualizar tachado
+      });
 
       label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(" " + asig));
+
+      const span = document.createElement("span");
+      span.textContent = asig;
+      if (checkbox.checked) {
+        span.classList.add("tachado");
+      }
+      label.appendChild(span);
+
       contenedor.appendChild(label);
-      contenedor.appendChild(document.createElement("br"));
     });
 
     panel.appendChild(contenedor);
   });
 }
 
-function actualizarMalla() {
-  const checked = document.querySelectorAll("input[type='checkbox']:checked");
-  const tachadas = new Set([...checked].map(cb => cb.dataset.asignatura));
-
-  const conexiones = [];
-  let nodos = [];
-
-  semestres.forEach((semestre, idx) => {
-    semestre.asignaturas.forEach((asig, j) => {
-      const nombreNodo = `${idx}_${j}`;
-      const label = tachadas.has(asig) ? `~~${asig}~~` : asig;
-      nodos.push(`${nombreNodo}["${label}"]`);
-
-      // conectar asignaturas dentro del mismo semestre
-      if (j > 0) {
-        const prev = `${idx}_${j - 1}`;
-        conexiones.push(`${prev} --> ${nombreNodo}`);
-      }
-
-      // conectar al primero del siguiente semestre
-      if (j === 0 && semestres[idx + 1]) {
-        conexiones.push(`${nombreNodo} --> ${idx + 1}_0`);
-      }
-    });
-  });
-
-  const grafo = `graph TD\n${nodos.join("\n")}\n${conexiones.join("\n")}`;
-  malla.textContent = grafo;
-  mermaid.init(undefined, malla);
-}
-
-// Inicializar
-generarCheckboxes();
-actualizarMalla();
+document.addEventListener("DOMContentLoaded", generarCheckboxes);
